@@ -10,6 +10,7 @@ import graphql.analysis.MaxQueryComplexityInstrumentation
 import graphql.analysis.MaxQueryDepthInstrumentation
 import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.execution.instrumentation.tracing.TracingInstrumentation
+import graphql.schema.GraphQLSchema
 import graphql.schema.GraphQLType
 import io.github.lavabear.kline.db.Persistence
 import org.joda.time.DateTime
@@ -29,10 +30,12 @@ data class GraphqlRequest(
 }
 
 fun graphql(persistence: Persistence): GraphQL {
+    val graphqlPackages = listOf("io.github.lavabear.kline.api", "io.github.lavabear.kline.graphql")
+
     val schema = toSchema(
         listOf(TopLevelObject(Query(persistence))),
         listOf(TopLevelObject(Mutation(persistence))),
-        SchemaGeneratorConfig(listOf("io.github.lavabear.kline.api"), hooks = CustomSchemaGeneratorHooks())
+        SchemaGeneratorConfig(graphqlPackages, hooks = CustomSchemaGeneratorHooks(GraphQLTypes(graphqlPackages)))
     )
 
     return GraphQL.newGraphQL(schema)
@@ -48,12 +51,17 @@ fun graphql(persistence: Persistence): GraphQL {
         .build()
 }
 
-class CustomSchemaGeneratorHooks : SchemaGeneratorHooks {
+class CustomSchemaGeneratorHooks(private val graphQLTypes: GraphQLTypes) : SchemaGeneratorHooks {
 
     override fun willGenerateGraphQLType(type: KType): GraphQLType? = when (type.classifier as? KClass<*>) {
-        UUID::class -> GraphQLTypes.uuid
-        DateTime::class -> GraphQLTypes.dateTime
-        LocalDate::class -> GraphQLTypes.date
-        else -> null
+        UUID::class -> graphQLTypes.uuid
+        DateTime::class -> graphQLTypes.dateTime
+        LocalDate::class -> graphQLTypes.date
+        else -> {
+            if(type.classifier.toString() == "T")
+                graphQLTypes.generic
+            else
+                null
+        }
     }
 }

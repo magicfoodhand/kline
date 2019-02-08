@@ -20,6 +20,8 @@ data class Metrics(val metricRegistry: MetricRegistry = MetricRegistry(),
     val meter500 : Meter = metricRegistry.meter("error-count")
     val statusCount : Meter = metricRegistry.meter("status-calls")
 
+    val failedDatabaseCount : Meter = metricRegistry.meter("failed-connection-count")
+
     val healthCheck : Supplier<SortedMap<String, HealthCheck.Result>>
             = Suppliers.memoizeWithExpiration(healthCheckRegistry::runHealthChecks, 1, TimeUnit.MINUTES)
 

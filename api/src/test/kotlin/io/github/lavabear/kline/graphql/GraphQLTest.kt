@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 private typealias GraphQLData = Map<String, List<Map<String, Any>>>
 
@@ -20,7 +21,13 @@ class GraphQLTest {
     private val graphql = graphql(persistence)
 
     private val usersNameQuery = """
-            { users { name } }
+            {
+                users {
+                    all {
+                        name
+                    }
+                }
+            }
         """.trimIndent()
 
     @Test
@@ -35,27 +42,6 @@ class GraphQLTest {
     }
 
     @Test
-    fun `base specification - all types`() {
-        val badQuery = graphql.execute("""
-        {
-          __schema {
-            types { name }
-          }
-        }
-        """)
-
-        val specification = badQuery.toSpecification()
-        assertFalse(specification.isEmpty())
-        assertEquals(setOf("extensions", "data"), specification.keys)
-
-        assertTrue(badQuery.errors.isEmpty())
-        val schemaSpec = specification["data"] as GraphQLData
-        val types = (schemaSpec["__schema"] as Map<String, List<Map<String, String>>>)["types"]
-
-        assertTrue(types?.flatMap { it.values }?.containsAll(setOf("User", "Query", "Mutation")) ?: false)
-    }
-
-    @Test
     fun `request all users - no users`() {
         every { persistence.allUsers() } returns CompletableFuture.completedFuture(emptyList())
 
@@ -66,8 +52,9 @@ class GraphQLTest {
         val specification = userResult.toSpecification()
 
         val userSpec = specification["data"] as GraphQLData
-        val users = (userSpec["users"] as List<Map<String, Any>>)
+        val users = (userSpec["users"] as Map<String, List<Map<String, Any>>>)["all"]
 
+        assertNotNull(users)
         assertTrue(users.isEmpty())
 
         clearMocks(persistence)
@@ -84,7 +71,8 @@ class GraphQLTest {
         val specification = userResult.toSpecification()
 
         val userSpec = specification["data"] as GraphQLData
-        val users = (userSpec["users"] as List<Map<String, Any>>)
+        val users = (userSpec["users"] as Map<String, List<Map<String, Any>>>)["all"]
+        assertNotNull(users)
         assertEquals(1, users.size)
 
         val user = users.first()

@@ -1,13 +1,12 @@
 package io.github.lavabear.kline.graphql
 
-import graphql.schema.Coercing
-import graphql.schema.CoercingSerializeException
-import graphql.schema.GraphQLScalarType
+import com.google.common.reflect.ClassPath
+import graphql.schema.*
 import org.joda.time.DateTime
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
-object GraphQLTypes {
+class GraphQLTypes(graphqlPackages: List<String>) {
     val uuid = scalarType(
         "UUID", "A type representing a formatted java.util.UUID",
         UUID::fromString, { it is UUID }
@@ -23,31 +22,39 @@ object GraphQLTypes {
         DateTime::parse, { it is DateTime }
     )
 
+    val generic = createGeneric(graphqlPackages)
+
+    private fun createGeneric(graphqlPackages: List<String>): GraphQLObjectType {
+//        val classInfo = ClassPath.from(ClassLoader.getSystemClassLoader())
+//        val classes = graphqlPackages.flatMap (classInfo::getTopLevelClasses)
+        return GraphQLObjectType("T", "The generic type", listOf(),listOf())
+    }
+
     private fun <T> scalarType(
         name: String, description: String,
         prepInput: (s: String) -> T,
-        tryConvert: (t: Any?) -> Boolean,
+        shouldConvert: (t: Any?) -> Boolean,
         output: (t: T) -> String = { it.toString() },
-        parseValue: (t: Any?) -> Boolean = { it is String}
+        isValidInput: (t: Any?) -> Boolean = { it is String}
     ) : GraphQLScalarType {
         val d = object : Coercing<T, String> {
             override fun parseLiteral(input: Any?): T {
-                if (parseValue(input))
-                    return prepInput(input as String)
+                return if (isValidInput(input))
+                    prepInput(input as String)
                 else
                     throw CoercingSerializeException("Unable to parseLiteral - $input")
             }
 
             override fun serialize(dataFetcherResult: Any?): String {
-                if (tryConvert(dataFetcherResult))
-                    return output(dataFetcherResult as T)
+                return if (shouldConvert(dataFetcherResult))
+                    output(dataFetcherResult as T)
                 else
                     throw CoercingSerializeException("Unable to serialize - $dataFetcherResult")
             }
 
             override fun parseValue(input: Any?): T {
-                if (parseValue(input))
-                    return prepInput(input as String)
+                return if (isValidInput(input))
+                    prepInput(input as String)
                 else
                     throw CoercingSerializeException("Unable to parseValue - $input")
             }
