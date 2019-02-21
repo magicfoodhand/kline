@@ -80,4 +80,4 @@ While it wouldn't be too hard to add a base Mobile App ([React Native]()) or Des
 not every website needs those. This project is primarily focused on web apps with a database.
 
 ## Why KLine?
-This project is inspired by [Rails](), K Line kind of sounds like it could be the name of a rail line.
+This project is inspired by [Rails](https://rubyonrails.org/), [K Line](https://en.wikipedia.org/wiki/K_Line) is actually a Japanese shipping company. That's the goal of this project, ship it!
