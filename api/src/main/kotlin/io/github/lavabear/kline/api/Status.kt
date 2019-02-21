@@ -2,8 +2,8 @@ package io.github.lavabear.kline.api
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-fun notFound() = { SimpleMessage("Not Found") }
-fun errorMessage() = { SimpleMessage("Something went wrong") }
+fun notFound() = SimpleMessage("Not Found")
+fun errorMessage() = SimpleMessage("Something went wrong")
 
 data class SimpleMessage(val message: String)
 

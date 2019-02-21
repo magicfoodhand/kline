@@ -10,7 +10,6 @@ import graphql.analysis.MaxQueryComplexityInstrumentation
 import graphql.analysis.MaxQueryDepthInstrumentation
 import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.execution.instrumentation.tracing.TracingInstrumentation
-import graphql.schema.GraphQLSchema
 import graphql.schema.GraphQLType
 import io.github.lavabear.kline.db.Persistence
 import org.joda.time.DateTime
@@ -20,23 +19,30 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 data class GraphqlRequest(
-    private val query: String,
-    private val operationName: String,
-    private val context: Any,
-    private val root: Any,
-    private val variables: Map<String, Any>
+    val query: String,
+    val operationName: String?,
+    val context: Any?,
+    val root: Any?,
+    val variables: Map<String, Any>?
 ) {
     fun prepared() = ExecutionInput(query, operationName, context, root, variables)
 }
 
+class GraphQLInitializationException(message: String, cause: Throwable?) : Exception(message, cause)
+
+@Throws(GraphQLInitializationException::class)
 fun graphql(persistence: Persistence): GraphQL {
     val graphqlPackages = listOf("io.github.lavabear.kline.api", "io.github.lavabear.kline.graphql")
 
-    val schema = toSchema(
-        listOf(TopLevelObject(Query(persistence))),
-        listOf(TopLevelObject(Mutation(persistence))),
-        SchemaGeneratorConfig(graphqlPackages, hooks = CustomSchemaGeneratorHooks(GraphQLTypes(graphqlPackages)))
-    )
+    val schema = try {
+        toSchema(
+            listOf(TopLevelObject(Query(persistence))),
+            listOf(TopLevelObject(Mutation(persistence))),
+            SchemaGeneratorConfig(graphqlPackages, hooks = CustomSchemaGeneratorHooks(GraphQLTypes()))
+        )
+    } catch (e: Exception) {
+        throw GraphQLInitializationException("Failed to create GraphQLSchema", e)
+    }
 
     return GraphQL.newGraphQL(schema)
         .instrumentation(
@@ -57,11 +63,6 @@ class CustomSchemaGeneratorHooks(private val graphQLTypes: GraphQLTypes) : Schem
         UUID::class -> graphQLTypes.uuid
         DateTime::class -> graphQLTypes.dateTime
         LocalDate::class -> graphQLTypes.date
-        else -> {
-            if(type.classifier.toString() == "T")
-                graphQLTypes.generic
-            else
-                null
-        }
+        else -> null
     }
 }

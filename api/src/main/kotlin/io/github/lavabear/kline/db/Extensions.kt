@@ -1,11 +1,10 @@
 package io.github.lavabear.kline.db
 
+import io.github.lavabear.kline.extensions.FutureList
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.concurrent.CompletableFuture
-
-typealias FutureList<T> = CompletableFuture<List<T>>
 
 fun <T> ColumnSet.query(
     vararg columns: Column<*>,

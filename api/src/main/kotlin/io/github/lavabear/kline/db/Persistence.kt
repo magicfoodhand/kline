@@ -30,7 +30,7 @@ class Persistence(private val dataSource: DataSource) {
             SchemaUtils.create(Users)
         }
 
-        LOG.info("Database migrations took ${System.currentTimeMillis() - currentTime} ms")
+        LOG.info("Database migrations took {} ms", System.currentTimeMillis() - currentTime)
     }
 
     companion object {

@@ -28,6 +28,14 @@ services:
     volumes:
     - ./web:/usr/src/app
     user: frontend
+  graphiql:
+    build:
+      context: ./graphiql
+      args:
+        UID: ${UID:-1003}
+    volumes:
+    - ./graphiql:/usr/src/app
+    user: graphiql
   web:
     image: nginx:latest
     volumes:
@@ -35,6 +43,7 @@ services:
     ports:
     - 3000:80
     depends_on:
+      - graphiql
       - frontend
       - api
     expose:

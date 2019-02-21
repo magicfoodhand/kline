@@ -1,18 +1,19 @@
 package io.github.lavabear.kline
 
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+
 import io.github.lavabear.kline.db.DbConfig
 import io.github.lavabear.kline.db.Persistence
 import io.github.lavabear.kline.graphql.graphql
 import io.github.lavabear.kline.server.Routes
-import io.github.lavabear.kline.server.configureServer
+import io.github.lavabear.kline.server.Server
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
 import java.net.URI
 import java.util.*
-import java.util.function.BiFunction
 import javax.sql.DataSource
 
 private val LOG: Logger = LoggerFactory.getLogger(::main.javaClass)
@@ -25,7 +26,7 @@ fun main() {
 
     val routeSetup = prepApplication(databaseUrl())
 
-    configureServer(routeSetup, objectMapper).start()
+    Server.configure(routeSetup, objectMapper).start()
 }
 
 private val waitTimes : Map<Int, Long> = mapOf<Int, Long>(
@@ -51,16 +52,17 @@ fun hostFromDatabaseUrl(
 fun dataSourceRetryOnFailure(
     metrics: Metrics, databaseUrl: String,
     attempts: Int = 5, waitTimeMs: Long = waitTimes[attempts] ?: 1_000,
-    dataSourceProvider: BiFunction<String, Metrics, DataSource> = BiFunction(DbConfig::dataSource)
+    dataSourceProvider: (String, Metrics) -> DataSource = DbConfig::dataSource
 ) : DataSource {
     if(attempts <= 0)
         throw StartupException("Could not obtain database connection: ${hostFromDatabaseUrl(databaseUrl)}")
 
     return try {
-        dataSourceProvider.apply(databaseUrl, metrics)
+        dataSourceProvider(databaseUrl, metrics)
     } catch (e: Throwable) {
         val remainingAttempts = attempts - 1
-        LOG.warn("Failed to connect, remaining attempts: {}, will retry in {} seconds", remainingAttempts, waitTimeMs)
+        LOG.warn("Failed to connect ", e)
+        LOG.warn("remaining attempts: {} - retry in {} seconds", remainingAttempts, waitTimeMs / 1_000)
         metrics.failedDatabaseCount.mark()
         Thread.sleep(waitTimeMs)
         dataSourceRetryOnFailure(metrics, databaseUrl, remainingAttempts)

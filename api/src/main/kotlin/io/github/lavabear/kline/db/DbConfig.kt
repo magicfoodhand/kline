@@ -18,7 +18,8 @@ object DbConfig {
         val config = HikariConfig()
 
         config.jdbcUrl = jdbcUrl
-        config.maximumPoolSize = 10
+        config.maximumPoolSize = 15
+        config.minimumIdle = 5
         config.poolName = "kline.db.${idGenerator.getAndIncrement()}"
         config.connectionTestQuery = "SELECT 1"
         config.metricRegistry = metrics.metricRegistry

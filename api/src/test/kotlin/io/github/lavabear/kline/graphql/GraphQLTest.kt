@@ -1,5 +1,6 @@
 package io.github.lavabear.kline.graphql
 
+import graphql.GraphQL
 import io.github.lavabear.kline.api.User
 import io.github.lavabear.kline.db.Persistence
 import io.mockk.*
@@ -81,4 +82,118 @@ class GraphQLTest {
 
         clearMocks(persistence)
     }
+
+    @Test
+    fun `request first user - one user`() {
+        every { persistence.allUsers() } returns CompletableFuture.completedFuture(listOf(User(UUID.randomUUID(), "test", DateTime.now())))
+
+        val userResult = graphql.execute(firstUserNameQuery)
+
+        verify(exactly = 1) { persistence.allUsers() }
+
+        val specification = userResult.toSpecification()
+
+        val userSpec = specification["data"] as GraphQLData
+        val users = (userSpec["users"] as Map<String, List<Map<String, Any>>>)["first"]
+        assertNotNull(users)
+        assertEquals(1, users.size)
+
+        val user = users.first()
+        assertEquals(setOf("name"), user.keys)
+        assertEquals("test", user["name"])
+
+        clearMocks(persistence)
+    }
+
+    @Test
+    fun `request first user - two user`() {
+        every { persistence.allUsers() } returns CompletableFuture.completedFuture(listOf(
+            User(UUID.randomUUID(), "test", DateTime.now()),
+            User(UUID.randomUUID(), "incorrect", DateTime.now())))
+
+        val userResult = graphql.execute(firstUserNameQuery)
+
+        verify(exactly = 1) { persistence.allUsers() }
+
+        val specification = userResult.toSpecification()
+
+        val userSpec = specification["data"] as GraphQLData
+        val users = (userSpec["users"] as Map<String,  List<Map<String, Any>>>)["first"]
+        assertNotNull(users)
+        assertEquals(1, users.size)
+
+        val user = users.first()
+        assertEquals(setOf("name"), user.keys)
+        assertEquals("test", user["name"])
+
+        clearMocks(persistence)
+    }
+
+
+    @Test
+    fun `request last user - one user`() {
+        every { persistence.allUsers() } returns CompletableFuture.completedFuture(listOf(User(UUID.randomUUID(), "test", DateTime.now())))
+
+        val userResult = graphql.execute(lastUserNameQuery)
+
+        verify(exactly = 1) { persistence.allUsers() }
+
+        val specification = userResult.toSpecification()
+
+        val userSpec = specification["data"] as GraphQLData
+        val users = (userSpec["users"] as Map<String, List<Map<String, Any>>>)["last"]
+        assertNotNull(users)
+        assertEquals(1, users.size)
+
+        val user = users.first()
+        assertEquals(setOf("name"), user.keys)
+        assertEquals("test", user["name"])
+
+        clearMocks(persistence)
+    }
+
+    @Test
+    fun `request last user - two user`() {
+        every { persistence.allUsers() } returns CompletableFuture.completedFuture(listOf(
+            User(UUID.randomUUID(), "incorrect", DateTime.now()),
+            User(UUID.randomUUID(), "test", DateTime.now())))
+
+        val userResult = graphql.execute(lastUserNameQuery)
+
+        verify(exactly = 1) { persistence.allUsers() }
+
+        val specification = userResult.toSpecification()
+
+        val userSpec = specification["data"] as GraphQLData
+        val users = (userSpec["users"] as Map<String, List<Map<String, Any>>>)["last"]
+        assertNotNull(users)
+        assertEquals(1, users.size)
+
+        val user = users.first()
+        assertEquals(setOf("name"), user.keys)
+        assertEquals("test", user["name"])
+
+        clearMocks(persistence)
+    }
+
+    private val firstUserNameQuery = """
+            {
+                users {
+                    first(number:1) {
+                        name
+                    }
+                }
+            }
+        """.trimIndent()
+
+    private val lastUserNameQuery = """
+            {
+                users {
+                    last(number:1) {
+                        name
+                    }
+                }
+            }
+        """.trimIndent()
+
 }
