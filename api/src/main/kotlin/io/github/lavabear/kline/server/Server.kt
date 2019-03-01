@@ -34,6 +34,10 @@ interface Server {
                 enableCorsForOrigin("*") // enables cors for the specified origin(s)
 
                 routes {
+                    get("/graphiql") {
+                        it.render("index.html")
+                    }
+
                     get("/status", simpleHandler(routeSetup::status))
 
                     post("/graphql", requestHandler(routeSetup::graphql))
