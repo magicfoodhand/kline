@@ -2,3 +2,16 @@
 .graphiql-container {
   min-height: 99vh;
 }
+
+.menu {
+  list-style: none;
+  display: inline-flex;
+}
+
+.menu a {
+  margin: 1em;
+}
+
+#root {
+   margin: 1em;
+}

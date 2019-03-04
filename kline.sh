@@ -7,6 +7,7 @@ case $run_type in
         docker-compose build
         ;;
     start)
+        watchman -- trigger ./api rebuild -- docker-compose up -d --no-deps --build api
         docker-compose up --build
         ;;
     stop)

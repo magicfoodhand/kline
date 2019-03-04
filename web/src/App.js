@@ -6,19 +6,13 @@ import {
     BrowserRouter as Router, Switch, Route, Link
 } from 'react-router-dom'
 
+import Home from './Home/Home'
+import Users from './Users/Users'
+import NewUser from "./NewUser/NewUser";
+
 const client = new ApolloClient({
     uri: '/api/graphql'
 });
-
-let Home = () => (
-    <div className="App">
-      <nav>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-        </ul>
-      </nav>
-    </div>
-)
 
 let NotFound = () => (
     <div>
@@ -31,7 +25,18 @@ class App extends Component {
     return (
       <Router>
           <ApolloProvider client={client}>
-              <Route exact path="/" component={Home}/>
+              <nav>
+                  <ul className='menu'>
+                      <li><Link to="/">Home</Link></li>
+                      <li><Link to="/users">Users</Link></li>
+                  </ul>
+              </nav>
+              <Switch>
+                  <Route exact path="/" component={Home}/>
+                  <Route exact path="/users" component={Users}/>
+                  <Route exact path="/users/new" component={NewUser}/>
+                  <Route path="/" component={NotFound}/>
+              </Switch>
           </ApolloProvider>
       </Router>
     );
