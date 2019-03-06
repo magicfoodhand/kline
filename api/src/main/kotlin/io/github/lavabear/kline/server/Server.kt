@@ -25,7 +25,7 @@ interface Server {
 
             return JavalinServer(Javalin.create().apply {
 
-                port(System.getenv().getOrDefault("PORT", 8080).toInt())
+                port(System.getenv().getOrDefault("PORT", "8080").toInt())
                 disableStartupBanner()
                 requestLogger { context, fl ->
                     LOG.info("{} {} ({}) took {}", context.method(), context.url(), context.status(), fl)
