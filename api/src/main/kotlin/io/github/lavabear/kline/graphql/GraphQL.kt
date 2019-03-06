@@ -36,9 +36,9 @@ fun graphql(persistence: Persistence): GraphQL {
 
     val schema = try {
         toSchema(
+            SchemaGeneratorConfig(graphqlPackages, hooks = CustomSchemaGeneratorHooks(GraphQLTypes())),
             listOf(TopLevelObject(Query(persistence))),
-            listOf(TopLevelObject(Mutation(persistence))),
-            SchemaGeneratorConfig(graphqlPackages, hooks = CustomSchemaGeneratorHooks(GraphQLTypes()))
+            listOf(TopLevelObject(Mutation(persistence)))
         )
     } catch (e: Exception) {
         throw GraphQLInitializationException("Failed to create GraphQLSchema", e)
