@@ -11,7 +11,7 @@ import Users from './Users/Users'
 import NewUser from "./NewUser/NewUser";
 
 const client = new ApolloClient({
-    uri: '/api/graphql'
+    uri: 'https://lit-citadel-61221.herokuapp.com/graphql'
 });
 
 let NotFound = () => (
