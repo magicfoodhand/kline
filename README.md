@@ -5,6 +5,7 @@
 Code Generated GraphQL Kotlin Server with Apollo React Front End
 
 ### Examples
+- [Example](https://peaceful-heyrovsky-60bac6.netlify.com/)
 - [Example Graphiql](https://lit-citadel-61221.herokuapp.com/graphiql)
 - [Quick Picks](https://github.com/lavabear/quick_picks)
 
@@ -66,7 +67,7 @@ Running without Docker is easy too.
 
 #### [Netlify](https://www.netlify.com/)
 - Create New Project (connect to Github)
-- Build Command: ```cd web && npm build``` 
+- Build Command: ```cd web && npm install && npm run build``` 
 - Publish Directory: ```web/build```
 
 #### [Heroku](https://www.heroku.com/)
