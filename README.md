@@ -5,31 +5,30 @@
 Code Generated GraphQL Kotlin Server with Apollo React Front End
 
 ### Easy Development
-Start developing with ```docker-compose up```; this brings up a database (postgres), 
+Start developing with ```./kline.sh start```; this brings up a database (postgres), 
 starts the React dev server (includes live updates), 
 starts a Kotlin Server (after running Database Migrations), all behind an nginx proxy.
 
 ### Backend
 - Kotlin all the way
-- Wonderful [kotlin-graphql]() for code first generation of GraphQL schemas, built on [graphql-java]()
-- Great Http Server [Javalin]()
-- Fantastic Connection Pooling [Hikari CP]().
-- Amazing ORM [Exposed]()
-- All the Metrics [metrics-core]() and [metrics-healthchecks]()
-- Lightning Fast Serialization [Jackson]()
-- Latest testing with [JUnit 5]()
-- Less Preventable Runtime Errors from Dependency Injection [Dagger]()
+- Wonderful [kotlin-graphql](https://github.com/ExpediaDotCom/graphql-kotlin) for code first generation of GraphQL schemas, built on [graphql-java](https://github.com/graphql-java/graphql-java)
+- Great Http Server [Javalin](https://javalin.io/)
+- Fantastic Connection Pooling [Hikari CP](https://github.com/brettwooldridge/HikariCP).
+- Amazing ORM [Exposed](https://github.com/JetBrains/Exposed)
+- All the Metrics [metrics-core](https://metrics.dropwizard.io/3.1.0/manual/core/) and [metrics-healthchecks](https://metrics.dropwizard.io/3.1.0/manual/healthchecks/)
+- Lightning Fast Serialization [Jackson](https://github.com/FasterXML/jackson)
+- Latest testing with [JUnit 5](https://junit.org/junit5/docs/current/user-guide/)
 
 ### Frontend
-- React all the way, courtesy of [create-react-app]()
-- Better GraphQL [Apollo Client]()
-- Beautiful Toast Notifications [Toastify]()
-- Don't mess up Dates [date-fns]()
+- React all the way, courtesy of [create-react-app](https://facebook.github.io/create-react-app/)
+- Better GraphQL [Apollo Client](https://www.apollographql.com/docs/react/)
+- Beautiful Toast Notifications [Toastify](https://github.com/fkhadra/react-toastify)
+- Don't mess up Dates [date-fns](https://github.com/date-fns/date-fns)
 
 #### Honorable Mentions
-- Exactly what I want Date Picker [react-datepicker]()
-- Anything Dates in One [BigCalender]()
-- Use Kotlin for Everything [create-kotlin-react-app]()
+- Exactly what I want Date Picker [react-datepicker](https://reactdatepicker.com/)
+- Anything Dates in One [BigCalender](https://github.com/intljusticemission/react-big-calendar)
+- Use Kotlin for Everything [create-kotlin-react-app](https://github.com/JetBrains/create-react-kotlin-app)
 
 ### Docker and Docker Compose
 Stop worrying about cross platform dependencies with Docker, easily run it with Docker Compose.
@@ -39,7 +38,7 @@ Stop worrying about cross platform dependencies with Docker, easily run it with 
 
 #### Docker Compose
 - Run everything on one machine
-    - Use [Docker Swarm]() to run on multiple machines
+    - Use [Docker Swarm](https://docs.docker.com/engine/swarm/) to run on multiple machines
 
 #### NGINX
 - Creates a proxy so that it seems like backend and frontend are running on the same server
@@ -76,7 +75,7 @@ Running without Docker is easy too.
 It's the wild west out here folks
 
 ### Mobile or Desktop App
-While it wouldn't be too hard to add a base Mobile App ([React Native]()) or Desktop App ([Tornado FX](), [Proton Native]()), 
+While it wouldn't be too hard to add a base Mobile App ([React Native](https://facebook.github.io/react-native/)) or Desktop App ([Tornado FX](https://github.com/edvin/tornadofx), [Proton Native](https://proton-native.js.org/#/)), 
 not every website needs those. This project is primarily focused on web apps with a database.
 
 ## Why KLine?
