@@ -4,6 +4,9 @@
 
 Code Generated GraphQL Kotlin Server with Apollo React Front End
 
+### Examples
+- [Quick Picks](https://github.com/lavabear/quick_picks)
+
 ### Easy Development
 Start developing with ```./kline.sh start```; this brings up a database (postgres), 
 starts the React dev server (includes live updates), 
