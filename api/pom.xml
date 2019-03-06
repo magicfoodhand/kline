@@ -42,7 +42,7 @@
         <dependency>
             <groupId>com.expedia</groupId>
             <artifactId>graphql-kotlin</artifactId>
-            <version>0.0.34</version>
+            <version>0.2.6</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
