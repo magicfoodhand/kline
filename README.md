@@ -5,7 +5,7 @@
 Code Generated GraphQL Kotlin Server with Apollo React Front End
 
 ### Examples
-- [Example](https://peaceful-heyrovsky-60bac6.netlify.com/) [Graphiql](https://lit-citadel-61221.herokuapp.com/graphiql)
+- [Example](https://peaceful-heyrovsky-60bac6.netlify.com/) - [Graphiql](https://lit-citadel-61221.herokuapp.com/graphiql)
 - [Quick Picks](https://github.com/lavabear/quick_picks)
 
 ### Easy Development
