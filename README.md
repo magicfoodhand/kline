@@ -1,11 +1,14 @@
 # KLine
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7801b4af-bcdc-41f1-9d37-20d347a4309d/deploy-status)](https://app.netlify.com/sites/kline/deploys)
+
+
 ## What is it?
 
 Code Generated GraphQL Kotlin Server with Apollo React Front End
 
 ### Examples
-- [Example Graphiql](https://lit-citadel-61221.herokuapp.com/graphiql)
+- [Example](https://peaceful-heyrovsky-60bac6.netlify.com/) - [Graphiql](https://lit-citadel-61221.herokuapp.com/graphiql)
 - [Quick Picks](https://github.com/lavabear/quick_picks)
 
 ### Easy Development
@@ -66,7 +69,7 @@ Running without Docker is easy too.
 
 #### [Netlify](https://www.netlify.com/)
 - Create New Project (connect to Github)
-- Build Command: ```cd web && npm build``` 
+- Build Command: ```cd web && npm install && npm run build``` 
 - Publish Directory: ```web/build```
 
 #### [Heroku](https://www.heroku.com/)
