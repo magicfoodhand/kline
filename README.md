@@ -10,6 +10,7 @@ Code Generated GraphQL Kotlin Server with Apollo React Front End
 ### Examples
 - [Example](https://peaceful-heyrovsky-60bac6.netlify.com/) - [Graphiql](https://lit-citadel-61221.herokuapp.com/graphiql)
 - [Quick Picks](https://github.com/lavabear/quick_picks)
+- [KLine Auth](https://github.com/lavabear/kline-auth)
 
 ### Easy Development
 Start developing with ```./kline.sh start```; this brings up a database (postgres), 
@@ -79,7 +80,7 @@ Running without Docker is easy too.
 ## What isn't it?
 
 ### Authenticated
-It's the wild west out here folks
+Check out [KLine Auth](https://github.com/lavabear/kline-auth)
 
 ### Mobile or Desktop App
 While it wouldn't be too hard to add a base Mobile App ([React Native](https://facebook.github.io/react-native/)) or Desktop App ([Tornado FX](https://github.com/edvin/tornadofx), [Proton Native](https://proton-native.js.org/#/)), 
